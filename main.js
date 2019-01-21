@@ -1,5 +1,5 @@
-import setupSW from './setupSW.js';
-import setupIndexedDB from './setupIndexedDB.js';
+import { setupServiceWorker } from "./setupServiceWorker.js";
+import { setupIndexedDB } from "./setupIndexedDB.js";
 
-setupSW();
+setupServiceWorker();
 setupIndexedDB();
