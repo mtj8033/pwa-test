@@ -1,5 +1,5 @@
 // pull in workbox
-importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.1/workbox-sw.js");
+importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 if (workbox) {
   console.log("Yay! Workbox is loaded 🎉");
@@ -42,7 +42,7 @@ if (workbox) {
   );
 
 
-  // Cache the vue script, update it in the background asap
+  // Cache the cdn jsdelivr scripts, update it in the background asap
   workbox.routing.registerRoute(
     new RegExp("https://cdn.jsdelivr.net/npm/.*\\.(js|css)$"),
     workbox.strategies.staleWhileRevalidate({
@@ -62,6 +62,32 @@ if (workbox) {
       ],
     }),
   );
+
+  const bgSyncPlugin = new workbox.backgroundSync.Plugin("pwaTestQueue", {
+    // Retry for max of 24 Hours
+    maxRetentionTime: 24 * 60,
+    // the new bit
+    callbacks: {
+      requestWillEnqueue: (request) => {
+        console.log("will enqueue", request);
+      },
+      requestWillReplay: (request) => {
+        console.log("will replay", request);
+      },
+      queueDidReplay: (requests) => {
+        console.log("replaying queue", requests);
+      }
+    }
+  });
+
+  workbox.routing.registerRoute(
+    new RegExp("^https://jsonplaceholder.typicode.com/todos"),
+    workbox.strategies.networkOnly({
+      plugins: [bgSyncPlugin]
+    }),
+    "POST"
+  );
+
 } else {
   console.log("Boo! Workbox didn't load 😬");
 }

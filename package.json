@@ -1,5 +1,14 @@
 {
+  "scripts": {
+    "dev": "parcel index.html --open",
+    "build": "parcel build index.html"
+  },
   "dependencies": {
-    "idb": "^3.0.2"
+    "escape-html": "^1.0.3",
+    "idb": "^3.0.2",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.11.0"
   }
 }

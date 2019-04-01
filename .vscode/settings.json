@@ -1,3 +1,5 @@
 {
-    "scm.alwaysShowProviders": true
+    "scm.alwaysShowProviders": true,
+    "files.useExperimentalFileWatcher": true,
+    "editor.multiCursorModifier": "alt"
 }
