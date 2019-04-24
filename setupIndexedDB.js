@@ -111,7 +111,7 @@ function updateTodoInLocal(todo, uuid) {
 function updateUI(todos) {
     todos.forEach(todo => {
         const todoToAdd =
-            `<li data-id="${todo.id ? todo.id : todo.localKey}"${todo.completed ? ' class="completed"' : ""}>
+            `<li data-id="${todo.id ? todo.id : todo.localKey}" ${todo.completed ? ' class="completed"' : ""}>
                 <input class="toggle" type="checkbox" ${todo.completed ? "checked" : ""}>
                 <label>${escapeHTML(todo.title)}</label>
                 <button class="destroy"></button>
