@@ -85,7 +85,7 @@ if (workbox) {
   },
   {
     "url": "index.js",
-    "revision": "8043dfaa7284cd35cc580c315d289e4b"
+    "revision": "e571ba7093c0d89f3203f8177a7929e3"
   },
   {
     "url": "ios-appicon-1024-1024.f31456ce.png",
@@ -149,7 +149,7 @@ if (workbox) {
   },
   {
     "url": "main.1f19ae8e.js",
-    "revision": "de7e37a0b68a013473c53eed808db42d"
+    "revision": "0738ada339428045c56e6ce9de0b6c96"
   },
   {
     "url": "main.af46ece4.css",
@@ -157,7 +157,7 @@ if (workbox) {
   },
   {
     "url": "main.af46ece4.js",
-    "revision": "8043dfaa7284cd35cc580c315d289e4b"
+    "revision": "e571ba7093c0d89f3203f8177a7929e3"
   },
   {
     "url": "manifest.webmanifest",

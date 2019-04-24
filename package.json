@@ -2,7 +2,7 @@
   "scripts": {
     "wbInject": "npx workbox injectManifest workbox/workbox-config.js",
     "watchWb": "npx nodemon --watch workbox -x \"npm run wbInject\" &",
-    "parcelDev": "parcel index.html --open",
+    "parcelDev": "parcel index.html --open --https",
     "dev": "npx run-p watchWb parcelDev",
     "build": "npx rimraf docs && npm run wbInject && parcel build index.html --out-dir docs --public-url /pwa-test/"
   },
