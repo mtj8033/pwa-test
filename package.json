@@ -4,7 +4,7 @@
     "watchWb": "npx nodemon --watch workbox -x \"npm run wbInject\" &",
     "parcelDev": "parcel index.html --open",
     "dev": "npx run-p watchWb parcelDev",
-    "build": "npm run wbInject && parcel build index.html --out-dir docs"
+    "build": "npm run wbInject && parcel build index.html --out-dir docs --public-url /pwa-test/"
   },
   "dependencies": {
     "escape-html": "^1.0.3",
