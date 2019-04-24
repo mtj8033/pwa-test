@@ -6,7 +6,7 @@ const dbPromise = setupIndexedDB();
 const addNewTodoElement = document.querySelector(".new-todo");
 const todoListElement = document.querySelector(".todo-list");
 const headers = new Headers({ 'Content-Type': 'application/json; charset=UTF-8' });
-const baseRestUrl = "https://jsonplaceholder.typicode.com/todos";
+const baseRestUrl = "//jsonplaceholder.typicode.com/todos";
 
 handleAddTodo();
 handleRemoveTodo();
