@@ -153,7 +153,7 @@ if (workbox) {
   },
   {
     "url": "manifest.webmanifest",
-    "revision": "13cd4981e57604cada731cec87b1834c"
+    "revision": "f459006cd84c1f7e0f7a4e3ade493d81"
   },
   {
     "url": "SplashScreen.scale-100.0e4fa0ce.png",
