@@ -6,14 +6,14 @@ const dbPromise = setupIndexedDB();
 const addNewTodoElement = document.querySelector(".new-todo");
 const todoListElement = document.querySelector(".todo-list");
 const headers = new Headers({ 'Content-Type': 'application/json; charset=UTF-8' });
-const baseRestUrl = "https://jsonplaceholder.typicode.com/todos";
+const baseRestUrl = "http://jsonplaceholder.typicode.com/todos";
 
 handleAddTodo();
 handleRemoveTodo();
 readTodos();
 
 export function setupIndexedDB() {
-    //check for support
+    //check for support of indexeddb
     if (("indexedDB" in window)) {
         return openDb("pwa-test-db", 1, (upgradeDb) => {
             if (!upgradeDb.objectStoreNames.contains("todos")) {

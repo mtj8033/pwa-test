@@ -1,7 +1,10 @@
 {
   "scripts": {
-    "dev": "parcel index.html --open",
-    "build": "parcel build index.html"
+    "wbInject": "npx workbox injectManifest workbox/workbox-config.js",
+    "watchWb": "npx nodemon --watch workbox -x \"npm run wbInject\" &",
+    "parcelDev": "parcel index.html --open",
+    "dev": "npx run-p watchWb parcelDev",
+    "build": "npm run wbInject && parcel build index.html --out-dir docs"
   },
   "dependencies": {
     "escape-html": "^1.0.3",
@@ -9,6 +12,9 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "parcel-bundler": "^1.11.0"
+    "nodemon": "^1.18.11",
+    "npm-run-all": "^4.1.5",
+    "parcel-bundler": "^1.11.0",
+    "workbox-cli": "^4.3.0"
   }
 }
