@@ -1,4 +1,4 @@
-import { openDb, deleteDb } from "idb";
+import { openDB, deleteDB } from "idb/with-async-ittr.js";
 import uuid from "uuid/v4";
 import escapeHTML from "escape-html";
 
@@ -15,11 +15,15 @@ readTodos();
 export function setupIndexedDB() {
     //check for support of indexeddb
     if (("indexedDB" in window)) {
-        return openDb("pwa-test-db", 1, (upgradeDb) => {
-            if (!upgradeDb.objectStoreNames.contains("todos")) {
-                let todosOS = upgradeDb.createObjectStore("todos");
-                // todosOS.createIndex("text", "text", { unique: false });
-            }
+        return openDB("pwa-test-db", 1, {
+            upgrade(db, oldVersion, newVersion, transaction) {
+                console.log(oldVersion);
+                console.log(transaction);
+                if (!db.objectStoreNames.contains("todos")) {
+                    let todosOS = db.createObjectStore("todos");
+                    // todosOS.createIndex("text", "text", { unique: false });
+                }
+            },
         });
     } else {
         return null;
@@ -29,26 +33,27 @@ export function setupIndexedDB() {
 
 function handleAddTodo() {
     /** 
-     * 
-Add flow:
-1a. Attempt to add to server
-	a. If successful, update in indexed with the updated info (primary key)
-	b. if unsuccessful and offline, notify user it was unsuccessful and they are working offline - display todo from indexeddb
-1b. Store it in indexeddb with a uuid
+     * Add flow:
+     * 1a. Attempt to add to server
+     *      a. If successful, update in indexed with the updated info (primary key)
+     *      b. if unsuccessful and offline, notify user it was unsuccessful and they are working offline - display todo from indexeddb
+     * 1b. Store it in indexeddb with a uuid
      * 
      */
-    addNewTodoElement.addEventListener("change", ({ target }) => {
+    addNewTodoElement.addEventListener("change", async ({ target }) => {
         const value = target.value.trim();
         addNewTodoElement.value = "";
         console.log("adding todo?", value);
 
+        const id = uuid();
+
         let todo = {
             userId: 1,
             title: value,
-            completed: false
+            completed: false,
+            localKey: id,
+            saved: false
         };
-
-        const id = uuid();
 
         fetch(baseRestUrl, {
             method: 'POST',
@@ -57,63 +62,67 @@ Add flow:
         })
             .then(response => response.json())
             .then(json => {
-                updateUI([json]);
+                json.saved = true;
+                updateUI([json], id);
                 updateTodoInLocal(json, id);
-            // })
-            // .catch(reason => {
-            //     if (!navigator.onLine) {
-            //         console.log("offline so loading from indexeddb");
-            //         updateUI([todo]);
-            //     }
-            //     throw reason;
+                // })
+                // .catch(reason => {
+                //     if (!navigator.onLine) {
+                //         console.log("offline so loading from indexeddb");
+                //         updateUI([todo]);
+                //     }
+                //     throw reason;
+
             });
         //always write to local just in case
+        updateUI([todo]);
         writeTodoToLocal(todo, id);
     });
 }
 
-function replaceTodosWithLatestState(todos) {
-    dbPromise.then((db) => {
-        let tx = db.transaction("todos", "readwrite");
-        let store = tx.objectStore("todos");
-        store.clear().then(() => {
-            todos.forEach(todo => {
-                const id = uuid();
-                store.add(todo, id);
-            });
-        });
-        return tx.complete;
-    });
-}
-
-function writeTodoToLocal(todo, uuid) {
-    dbPromise.then((db) => {
-        let tx = db.transaction("todos", "readwrite");
-        let store = tx.objectStore("todos");
-        store.add(todo, uuid);
-        return tx.complete;
-    }).then(() => {
-        console.log("Added a todo to the store", uuid);
-    });
-}
-
-function updateTodoInLocal(todo, uuid) {
-    dbPromise.then((db) => {
-        let tx = db.transaction("todos", "readwrite");
-        let store = tx.objectStore("todos");
-        store.put(todo, uuid);
-        return tx.complete;
-    }).then(() => {
-        console.log("Added a todo to the store", uuid);
-    });
-}
-
-function updateUI(todos) {
+async function replaceTodosWithLatestState(todos) {
+    let db = await dbPromise;
+    let tx = db.transaction("todos", "readwrite");
+    let store = tx.objectStore("todos");
+    await store.clear();
     todos.forEach(todo => {
+        const id = uuid();
+        store.add(todo, id);
+    });
+    return tx.done;
+}
+
+async function writeTodoToLocal(todo, uuid) {
+    let db = await dbPromise;
+    let tx = db.transaction("todos", "readwrite");
+    let store = tx.objectStore("todos");
+    store.add(todo, uuid);
+    await tx.done;
+    console.log("Added a todo to the store", uuid);
+}
+
+async function updateTodoInLocal(todo, uuid) {
+    let db = await dbPromise;
+    let tx = db.transaction("todos", "readwrite");
+    let store = tx.objectStore("todos");
+    store.put(todo, uuid);
+    await tx.done;
+    console.log("Added a todo to the store", uuid);
+}
+
+function updateUI(todos, uuid) {
+    todos.forEach(todo => {
+        if (uuid) {
+            const existing = document.querySelector(`li[data-id="${uuid}"]`);
+            if (existing) {
+                existing.remove();
+            }
+        }
         const todoToAdd =
             `<li data-id="${todo.id ? todo.id : todo.localKey}" ${todo.completed ? ' class="completed"' : ""}>
                 <input class="toggle" type="checkbox" ${todo.completed ? "checked" : ""}>
                 <label>${escapeHTML(todo.title)}</label>
+                <button ${todo.saved ? ' class="saved"' : todo.localKey ? ' class="local"' : ""}></button>
                 <button class="destroy"></button>
             </li>`;
         todoListElement.insertAdjacentHTML("afterbegin", todoToAdd);
@@ -123,78 +132,81 @@ function updateUI(todos) {
 
 function handleRemoveTodo() {
     /** 
-     * 
-
-Remove flow:
-1a. Attempt to remove from server
-	a. if successful, ?
-	b. if unsuccessful and offline, notify user
-1b. Remove it in indexeddb
+     * Remove Flow:
+     * 1a. Attempt to remove from server
+     *      a. if successful, ?
+     *      b. if unsuccessful and offline, notify user
+     * 1b. Remove it in indexeddb
      */
-    todoListElement.addEventListener("click", ({ target }) => {
+    todoListElement.addEventListener("click", async ({ target }) => {
         if (target.classList.contains("destroy")) {
             const todoElement = target.parentElement;
-            dbPromise.then(db => {
-                let tx = db.transaction("todos", "readwrite");
-                let store = tx.objectStore("todos");
-                store.delete(Number(todoElement.getAttribute("data-id"))).then(() => {
-                    todoListElement.removeChild(todoElement);
-                    if (todoListElement.children.length === 0) {
-                        todoListElement.parentElement.style.display = "none";
-                    }
-                });
-                return tx.complete;
-            }).then(() => {
-                console.log("deleted a todo from the store");
-            });
+            let db = await dbPromise;
+            let tx = db.transaction("todos", "readwrite");
+            let store = tx.objectStore("todos");
+            await store.delete(Number(todoElement.getAttribute("data-id")));
+
+            todoListElement.removeChild(todoElement);
+            if (todoListElement.children.length === 0) {
+                todoListElement.parentElement.style.display = "none";
+            }
+
+            await tx.done;
+            console.log("deleted a todo from the store");
         }
     });
 }
 
-function readTodos() {
-    /**Load flow:
-1. Attempt to load from network
-	1a. If successful then store into indexeddb and display
-	1b. if unsuccessful and offline then retrieve from indexeddb and display, note to user that they are working offline
- */
-    fetch(baseRestUrl, {
-        method: 'GET',
-        headers: headers
-    })
-        .then(response => response.json())
-        .then(json => {
-            updateUI(json);
-            replaceTodosWithLatestState(json);
-        }).catch((reason) => {
-            if (!navigator.onLine) {
-                console.log("offline so loading from indexeddb");
-                readTodosFromIndexedDB();
-            }
-            throw reason;
+async function readTodos() {
+    /**
+     * Load flow:
+     * 1. Attempt to load from network
+     *      1a. If successful then store into indexeddb and display
+     *      1b. if unsuccessful and offline then retrieve from indexeddb and display, note to user that they are working offline
+     */
+    /** 
+     * Load flow:
+     * 
+     * 1. Read unsaved from indexeddb
+     * 2. Read all saved local from indexeddb (wouldn't do this if you had a real backend api to call/save)
+     * 3. Read all non-local from 
+     */
+    try {
+        let response = await fetch(baseRestUrl, {
+            method: 'GET',
+            headers: headers
         });
+        let json = await response.json();
+        updateUI(json);
+        replaceTodosWithLatestState(json);
+    } catch (reason) {
+        if (!navigator.onLine) {
+            console.log("offline so loading from indexeddb");
+            readTodosFromIndexedDB();
+        }
+        throw reason;
+    }
 
 }
 
-function readTodosFromIndexedDB() {
-    dbPromise.then(db => {
-        const tx = db.transaction("todos");
-        let todos = "";
-        tx.objectStore("todos").iterateCursor(null, "prev", cursor => {
-            if (!cursor) return;
-            let todo = cursor.value;
-            if (!todo.id) {
-                todo.localKey = cursor.key;
-            }
-            updateUI([todo]);
-            cursor.continue();
-        });
+async function readTodosFromIndexedDB() {
+    let db = await dbPromise;
+    const tx = db.transaction("todos");
+    let todos = "";
+    for await (const cursor of tx.store) {
+        if (!cursor) return;
+        let todo = cursor.value;
+        if (!todo.id) {
+            todo.localKey = cursor.key;
+        }
+        updateUI([todo]);
+        cursor.continue();
+    }
 
-        tx.complete.then(() => {
-            console.log("done");
-            if (todos !== "") {
-                todoListElement.innerHTML = todos;
-                todoListElement.parentElement.style.display = "block";
-            }
-        });
-    });
+    await tx.done;
+    console.log("done");
+    if (todos !== "") {
+        todoListElement.innerHTML = todos;
+        todoListElement.parentElement.style.display = "block";
+    }
 }

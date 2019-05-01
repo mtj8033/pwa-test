@@ -8,7 +8,7 @@
     "short_name": "pwa-test",
     "description": "Test PWA Application to show some of the different tools, apis, etc.",
     "orientation": "any",
-    "theme_color": "#000",
+    "theme_color": "#2274f9",
     "background_color": "#000",
     "related_applications": [],
     "prefer_related_applications": false,
