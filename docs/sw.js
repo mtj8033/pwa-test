@@ -81,7 +81,7 @@ if (workbox) {
   },
   {
     "url": "index.html",
-    "revision": "a6262d125eabda5fc3f759d3d950cc5b"
+    "revision": "5bf0e77d6b9199913b6dfa5a9b1c1a5b"
   },
   {
     "url": "ios-appicon-1024-1024.74317fc8.png",
@@ -144,16 +144,16 @@ if (workbox) {
     "revision": "608dda8fb0743480fab91e0794225917"
   },
   {
-    "url": "main.64c0d98b.css",
-    "revision": "d41d8cd98f00b204e9800998ecf8427e"
+    "url": "main.24ed4175.js",
+    "revision": "eeaa66b94a719f02f124d2f259bb1939"
   },
   {
-    "url": "main.d90a4d7c.js",
-    "revision": "ad74dddfbf6b20d04bca82b03ff611af"
+    "url": "main.2f4123a2.css",
+    "revision": "0603bf0f445a2c6e9bc4c4b02ab9ae51"
   },
   {
     "url": "manifest.webmanifest",
-    "revision": "f459006cd84c1f7e0f7a4e3ade493d81"
+    "revision": "59b8e732f0822ac011842fc2d18fd823"
   },
   {
     "url": "SplashScreen.scale-100.0e4fa0ce.png",
