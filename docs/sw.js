@@ -8,6 +8,14 @@ if (workbox) {
   //injected by workbox-cli based on workbox-config.js
   workbox.precaching.precacheAndRoute([
   {
+    "url": "addtohomescreen.55a48cf4.js",
+    "revision": "f830d93bb7153377bd968a3d3ca0431e"
+  },
+  {
+    "url": "addtohomescreen.d8295224.css",
+    "revision": "def7fd38dd45e9d2f0d5a3854331a278"
+  },
+  {
     "url": "android-launchericon-144-144.eba60c14.png",
     "revision": "654d6ab7d81fcee9d989b022975ab0cf"
   },
@@ -81,7 +89,7 @@ if (workbox) {
   },
   {
     "url": "index.html",
-    "revision": "8dc3e94770a8c2ae60a961df06173f2a"
+    "revision": "22179dcbabd63021a7e6e9ba93f6cc3d"
   },
   {
     "url": "ios-appicon-1024-1024.74317fc8.png",
@@ -144,12 +152,12 @@ if (workbox) {
     "revision": "608dda8fb0743480fab91e0794225917"
   },
   {
-    "url": "main.2f4123a2.css",
-    "revision": "0603bf0f445a2c6e9bc4c4b02ab9ae51"
+    "url": "main.2776cc2c.js",
+    "revision": "7d434b5285e964856f00b95c39b616cb"
   },
   {
-    "url": "main.664bf639.js",
-    "revision": "58200d37a33a9fa21270fad2f11da105"
+    "url": "main.cbf8b479.css",
+    "revision": "21cfa72126625adb83c6c41cc3a51842"
   },
   {
     "url": "manifest.webmanifest",

@@ -7,7 +7,7 @@
     height: 40px;
     margin: auto 0;
     font-size: 20px;
-    margin-bottom: 11px;
+    margin-bottom: 1px;
 }
 .todo-list li .saved:after {
     content: '\1f4be';
@@ -15,4 +15,29 @@
 
 .todo-list li .local:after {
     content: '\1f504';
+}
+
+.todoapp h1 {
+    color: rgba(175, 47, 47, 0.65);
+}
+
+.speech-bubble:after {
+    content: none;
+}
+
+.installButton {
+    display: none;
+    font-size: 30px;
+    position: absolute;
+    right: -50px;
+    top: -73px;
+}
+
+.installButton:before {
+    content: '\21E9';
+    margin-right: 5px;
+}
+
+.is-visible {
+    display: block;
 }

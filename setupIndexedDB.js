@@ -95,7 +95,7 @@ async function getId() {
     let db = await dbPromise;
     let tx = db.transaction("todos");
     let localCount = await tx.store.index("localKey").count();
-    return 200 + localCount
+    return 200 + localCount + 1;
 }
 
 async function writeTodoToLocal(todo, id) {
@@ -128,7 +128,7 @@ function updateUI(todos, id) {
             `<li data-id="${id ? id : todo.localKey ? todo.localKey : todo.id}" ${todo.completed ? ' class="completed"' : ""}>
                 <input class="toggle" type="checkbox" ${todo.completed ? "checked" : ""}>
                 <label>${escapeHTML(todo.title)}</label>
-                <button ${todo.saved ? ' class="saved"' : todo.localKey ? ' class="local"' : ""}></button>
+                <span ${todo.saved ? ' class="saved"' : todo.localKey ? ' class="local"' : ""}></span>
                 <button class="destroy"></button>
             </li>`;
         todoListElement.insertAdjacentHTML("afterbegin", todoToAdd);
@@ -163,7 +163,7 @@ function handleRemoveTodo() {
 }
 
 async function readTodos() {
-    let id = await getId();
+    let startId = await getId();
     /**
      * Load flow:
      * 1. Attempt to load from network
@@ -186,7 +186,7 @@ async function readTodos() {
         updateUI(json);
         let localTasks = await readLocalTodosFromIndexedDB();
         json.push(...localTasks);
-        replaceTodosWithLatestState(json, id);
+        replaceTodosWithLatestState(json, startId);
     } catch (reason) {
         if (!navigator.onLine) {
             console.log("offline so loading from indexeddb");
