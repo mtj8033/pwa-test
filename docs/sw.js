@@ -81,7 +81,7 @@ if (workbox) {
   },
   {
     "url": "index.html",
-    "revision": "5bf0e77d6b9199913b6dfa5a9b1c1a5b"
+    "revision": "8dc3e94770a8c2ae60a961df06173f2a"
   },
   {
     "url": "ios-appicon-1024-1024.74317fc8.png",
@@ -144,12 +144,12 @@ if (workbox) {
     "revision": "608dda8fb0743480fab91e0794225917"
   },
   {
-    "url": "main.24ed4175.js",
-    "revision": "eeaa66b94a719f02f124d2f259bb1939"
-  },
-  {
     "url": "main.2f4123a2.css",
     "revision": "0603bf0f445a2c6e9bc4c4b02ab9ae51"
+  },
+  {
+    "url": "main.664bf639.js",
+    "revision": "58200d37a33a9fa21270fad2f11da105"
   },
   {
     "url": "manifest.webmanifest",
@@ -477,7 +477,7 @@ if (workbox) {
 
   // Cache the cdn jsdelivr scripts, update it in the background asap
   workbox.routing.registerRoute(
-    new RegExp("https://cdn.jsdelivr.net/npm/.*\\.(js|css)$"),
+    new RegExp("^[^/]*//cdn.jsdelivr.net/npm/.*\\.(js|css)$"),
     new workbox.strategies.StaleWhileRevalidate({
       // NOTE: need to be extra careful with opaque responses as they can take
       // up a large amount of the cache
@@ -514,7 +514,7 @@ if (workbox) {
   });
 
   workbox.routing.registerRoute(
-    new RegExp("^http.?://jsonplaceholder.typicode.com/todos"),
+    new RegExp("^[^/]*//jsonplaceholder.typicode.com/todos"),
     new workbox.strategies.NetworkOnly({
       plugins: [bgSyncPlugin]
     }),

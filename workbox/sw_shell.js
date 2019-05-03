@@ -48,7 +48,7 @@ if (workbox) {
 
   // Cache the cdn jsdelivr scripts, update it in the background asap
   workbox.routing.registerRoute(
-    new RegExp("https://cdn.jsdelivr.net/npm/.*\\.(js|css)$"),
+    new RegExp("^[^/]*//cdn.jsdelivr.net/npm/.*\\.(js|css)$"),
     new workbox.strategies.StaleWhileRevalidate({
       // NOTE: need to be extra careful with opaque responses as they can take
       // up a large amount of the cache
@@ -85,7 +85,7 @@ if (workbox) {
   });
 
   workbox.routing.registerRoute(
-    new RegExp("^http.?://jsonplaceholder.typicode.com/todos"),
+    new RegExp("^[^/]*//jsonplaceholder.typicode.com/todos"),
     new workbox.strategies.NetworkOnly({
       plugins: [bgSyncPlugin]
     }),
