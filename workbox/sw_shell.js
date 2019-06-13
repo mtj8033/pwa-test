@@ -5,9 +5,6 @@ importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.0/workbox
 if (workbox) {
   console.log("Yay! Workbox is loaded 🎉!!");
 
-  //injected by workbox-cli based on workbox-config.js
-  workbox.precaching.precacheAndRoute([]);
-
   // Setup a cache
   workbox.core.setCacheNameDetails({
     prefix: "pwa-test",
@@ -92,6 +89,12 @@ if (workbox) {
     "POST"
   );
 
+  console.log("made it to precacheAndRoute");
+  //injected by workbox-cli based on workbox-config.js
+  workbox.precaching.precacheAndRoute([]);
+
+
+  console.log("made it to end of workbox setup");
 } else {
   console.log("Boo! Workbox didn't load 😬");
 }

@@ -1,4 +1,4 @@
-import { openDB, deleteDB } from "idb/with-async-ittr.js";
+import { openDB, deleteDB } from "idb/with-async-ittr";
 import escapeHTML from "escape-html";
 
 const dbPromise = setupIndexedDB();

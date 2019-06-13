@@ -3,8 +3,8 @@
     "wbInject": "npx workbox injectManifest",
     "watchWb": "npx nodemon --watch workbox -x \"npm run wbInject -- workbox/workbox-config.js\" &",
     "parcelDev": "parcel index.html --open",
-    "dev": "npx rimraf dist && npx run-p watchWb parcelDev",
-    "build": "npx rimraf docs && npx nodetouch sw.js && parcel build index.html --out-dir docs --public-url /pwa-test/ && npm run wbInject -- workbox/workbox-config.prod.js"
+    "start": "npx rimraf dist && npx run-p watchWb parcelDev",
+    "build-ghdocs": "npx rimraf docs && npx nodetouch sw.js && parcel build index.html --out-dir docs --public-url /pwa-test/ && npm run wbInject -- workbox/workbox-config.prod.js"
   },
   "browserslist": [
     "since 2017-06"
