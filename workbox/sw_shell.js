@@ -71,12 +71,12 @@ if (workbox) {
     onSync: async ({ queue }) => {
       console.log("onsync event fired by browser");
       let entry;
-      while (entry = await this.shiftRequest()) {
+      while (entry = await queue.shiftRequest()) {
         try {
           await fetch(entry.request);
         } catch (error) {
           console.error('Replay failed for request', entry.request, error);
-          await this.unshiftRequest(entry);
+          await queue.unshiftRequest(entry);
           return;
         }
       }
