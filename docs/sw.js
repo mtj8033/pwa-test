@@ -75,11 +75,11 @@ if (workbox) {
         try {
           let clone = entry.request.clone();
           let response = await fetch(clone);
-
+          let responseJSON = await response.json();
           // emit to the client
           let clients = await self.clients.matchAll();
           for (const client of clients) {
-            client.postMessage("test");
+            client.postMessage(responseJSON);
           }
         } catch (error) {
           console.error('Replay failed for request', entry.request, error);
