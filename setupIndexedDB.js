@@ -44,7 +44,11 @@ export function setupIndexedDB() {
 if('serviceWorker' in navigator){
   // Handler for messages coming from the service worker
   navigator.serviceWorker.addEventListener('message', (event) => {
-    console.log("received event from sw", message);
+    let json = event.data;
+    let id = json.localKey;
+    json.saved = true;
+    updateUI([json], id);
+    updateTodoInLocal(json, id);
   });
 }
 function handleAddTodo() {
