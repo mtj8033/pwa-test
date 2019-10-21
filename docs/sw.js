@@ -292,7 +292,7 @@ if (workbox) {
   },
   {
     "url": "manifest.webmanifest",
-    "revision": "59b8e732f0822ac011842fc2d18fd823"
+    "revision": "cd4312f346363ad65e242bbc0fe5af29"
   },
   {
     "url": "SplashScreen.scale-100.0e4fa0ce.png",

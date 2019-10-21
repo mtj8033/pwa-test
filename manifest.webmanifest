@@ -4,7 +4,7 @@
     "name": "PWA Test",
     "scope": "/",
     "display": "standalone",
-    "start_url": "./",
+    "start_url": "/",
     "short_name": "pwa-test",
     "description": "Test PWA Application to show some of the different tools, apis, etc.",
     "orientation": "any",
