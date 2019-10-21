@@ -132,8 +132,8 @@ if (workbox) {
   //injected by workbox-cli based on workbox-config.js
   workbox.precaching.precacheAndRoute([
   {
-    "url": "addtohomescreen.afdd3be0.js",
-    "revision": "a05c7a19460491d1e693f72a2f1bf9c8"
+    "url": "addtohomescreen.55a48cf4.js",
+    "revision": "f830d93bb7153377bd968a3d3ca0431e"
   },
   {
     "url": "addtohomescreen.d8295224.css",
@@ -213,7 +213,7 @@ if (workbox) {
   },
   {
     "url": "index.html",
-    "revision": "debb5289c3397c64277d4439ef85a4dc"
+    "revision": "0cf30491d698f1cac49d5a75ee252d71"
   },
   {
     "url": "ios-appicon-1024-1024.74317fc8.png",
@@ -276,8 +276,8 @@ if (workbox) {
     "revision": "608dda8fb0743480fab91e0794225917"
   },
   {
-    "url": "main.4b25786d.js",
-    "revision": "3897665ba4d2892a5dbe721bdfb7b318"
+    "url": "main.3f87bcb3.js",
+    "revision": "4d43d763522e46d5fa871f3cc902313c"
   },
   {
     "url": "main.841951be.css",

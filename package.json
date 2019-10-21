@@ -7,7 +7,7 @@
     "build-ghdocs": "npx rimraf docs && npx nodetouch sw.js && parcel build index.html --out-dir docs --public-url /pwa-test/ && npm run wbInject -- workbox/workbox-config.prod.js"
   },
   "browserslist": [
-    "since 2017-06"
+    "last 1 Chrome versions"
   ],
   "dependencies": {
     "escape-html": "^1.0.3",
