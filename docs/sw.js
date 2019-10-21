@@ -220,7 +220,7 @@ if (workbox) {
   },
   {
     "url": "index.html",
-    "revision": "5f7915294366672dbae1cc27f2702bba"
+    "revision": "ccd21fa33a7c701dbecbbf22875e3305"
   },
   {
     "url": "ios-appicon-1024-1024.74317fc8.png",
@@ -292,7 +292,7 @@ if (workbox) {
   },
   {
     "url": "manifest.webmanifest",
-    "revision": "cd4312f346363ad65e242bbc0fe5af29"
+    "revision": "d43d9ac916c1a9516f229925443fa9fe"
   },
   {
     "url": "SplashScreen.scale-100.0e4fa0ce.png",
