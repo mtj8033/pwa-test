@@ -68,16 +68,19 @@ if (workbox) {
     // Retry for max of 24 Hours
     maxRetentionTime: 24 * 60,
     // the new bit
-    callbacks: {
-      requestWillEnqueue: (request) => {
-        console.log("will enqueue", request);
-      },
-      requestWillReplay: (request) => {
-        console.log("will replay", request);
-      },
-      queueDidReplay: (requests) => {
-        console.log("replaying queue", requests);
+    onSync: async ({ queue }) => {
+      console.log("onsync event fired by browser");
+      let entry;
+      while (entry = await this.shiftRequest()) {
+        try {
+          await fetch(entry.request);
+        } catch (error) {
+          console.error('Replay failed for request', entry.request, error);
+          await this.unshiftRequest(entry);
+          return;
+        }
       }
+      console.log('Replay complete!');
     }
   });
 
@@ -89,12 +92,48 @@ if (workbox) {
     "POST"
   );
 
+  // const bgQueue = new workbox.backgroundSync.Queue('pwaTestQueue', {
+  //   // Retry for max of 24 Hours
+  //   maxRetentionTime: 24 * 60,
+  //   // the new bit
+  //   onSync: async ({ queue }) => {
+  //     console.log("onsync event fired by browser");
+  //     let entry;
+  //     while (entry = await this.shiftRequest()) {
+  //       try {
+  //         await fetch(entry.request);
+  //       } catch (error) {
+  //         console.error('Replay failed for request', entry.request, error);
+  //         await this.unshiftRequest(entry);
+  //         return;
+  //       }
+  //     }
+  //     console.log('Replay complete!');
+  //   }
+  // });
+  // self.addEventListener('fetch', function (e) {
+  //   console.log("fetch failure listener");
+  //   if (!new RegExp("^[^/]*//jsonplaceholder.typicode.com/todos").test(e.request.url)) {
+  //     return;
+  //   }
+  //
+  //
+  //   console.log("json placeholder failure");
+  //   const clone = e.request.clone();
+  //   e.respondWith(fetch(e.request).catch((err) => {
+  //     bgQueue.pushRequest({
+  //       request: clone,
+  //     });
+  //     throw err;
+  //   }));
+  // });
+
   console.log("made it to precacheAndRoute");
   //injected by workbox-cli based on workbox-config.js
   workbox.precaching.precacheAndRoute([
   {
-    "url": "addtohomescreen.55a48cf4.js",
-    "revision": "f830d93bb7153377bd968a3d3ca0431e"
+    "url": "addtohomescreen.afdd3be0.js",
+    "revision": "a05c7a19460491d1e693f72a2f1bf9c8"
   },
   {
     "url": "addtohomescreen.d8295224.css",
@@ -174,7 +213,7 @@ if (workbox) {
   },
   {
     "url": "index.html",
-    "revision": "d5e3958752da0c5239ec1ba56ebda993"
+    "revision": "debb5289c3397c64277d4439ef85a4dc"
   },
   {
     "url": "ios-appicon-1024-1024.74317fc8.png",
@@ -237,8 +276,8 @@ if (workbox) {
     "revision": "608dda8fb0743480fab91e0794225917"
   },
   {
-    "url": "main.73735eb1.js",
-    "revision": "ba8e28d486ec972ff5677bc6216cb73a"
+    "url": "main.4b25786d.js",
+    "revision": "3897665ba4d2892a5dbe721bdfb7b318"
   },
   {
     "url": "main.841951be.css",

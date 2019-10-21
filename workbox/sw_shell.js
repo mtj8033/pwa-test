@@ -68,16 +68,19 @@ if (workbox) {
     // Retry for max of 24 Hours
     maxRetentionTime: 24 * 60,
     // the new bit
-    callbacks: {
-      requestWillEnqueue: (request) => {
-        console.log("will enqueue", request);
-      },
-      requestWillReplay: (request) => {
-        console.log("will replay", request);
-      },
-      queueDidReplay: (requests) => {
-        console.log("replaying queue", requests);
+    onSync: async ({ queue }) => {
+      console.log("onsync event fired by browser");
+      let entry;
+      while (entry = await this.shiftRequest()) {
+        try {
+          await fetch(entry.request);
+        } catch (error) {
+          console.error('Replay failed for request', entry.request, error);
+          await this.unshiftRequest(entry);
+          return;
+        }
       }
+      console.log('Replay complete!');
     }
   });
 
@@ -88,6 +91,42 @@ if (workbox) {
     }),
     "POST"
   );
+
+  // const bgQueue = new workbox.backgroundSync.Queue('pwaTestQueue', {
+  //   // Retry for max of 24 Hours
+  //   maxRetentionTime: 24 * 60,
+  //   // the new bit
+  //   onSync: async ({ queue }) => {
+  //     console.log("onsync event fired by browser");
+  //     let entry;
+  //     while (entry = await this.shiftRequest()) {
+  //       try {
+  //         await fetch(entry.request);
+  //       } catch (error) {
+  //         console.error('Replay failed for request', entry.request, error);
+  //         await this.unshiftRequest(entry);
+  //         return;
+  //       }
+  //     }
+  //     console.log('Replay complete!');
+  //   }
+  // });
+  // self.addEventListener('fetch', function (e) {
+  //   console.log("fetch failure listener");
+  //   if (!new RegExp("^[^/]*//jsonplaceholder.typicode.com/todos").test(e.request.url)) {
+  //     return;
+  //   }
+  //
+  //
+  //   console.log("json placeholder failure");
+  //   const clone = e.request.clone();
+  //   e.respondWith(fetch(e.request).catch((err) => {
+  //     bgQueue.pushRequest({
+  //       request: clone,
+  //     });
+  //     throw err;
+  //   }));
+  // });
 
   console.log("made it to precacheAndRoute");
   //injected by workbox-cli based on workbox-config.js
