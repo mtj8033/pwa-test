@@ -41,14 +41,20 @@ export function setupIndexedDB() {
 }
 
 
+if('serviceWorker' in navigator){
+  // Handler for messages coming from the service worker
+  navigator.serviceWorker.addEventListener('message', (event) => {
+    console.log("received event from sw", message);
+  });
+}
 function handleAddTodo() {
-    /** 
+    /**
      * Add flow:
      * 1a. Attempt to add to server
      *      a. If successful, update in indexed with the updated info (primary key)
      *      b. if unsuccessful and offline, notify user it was unsuccessful and they are working offline - display todo from indexeddb
      * 1b. Store it in indexeddb
-     * 
+     *
      */
     addNewTodoElement.addEventListener("change", async ({ target }) => {
         const value = target.value.trim();
@@ -137,7 +143,7 @@ function updateUI(todos, id) {
 }
 
 function handleRemoveTodo() {
-    /** 
+    /**
      * Remove Flow:
      * 1a. Attempt to remove from server
      *      a. if successful, ?
@@ -170,9 +176,9 @@ async function readTodos() {
      *      1a. If successful then store into indexeddb and display
      *      1b. if unsuccessful and offline then retrieve from indexeddb and display, note to user that they are working offline
      */
-    /** 
+    /**
      * Load flow:
-     * 
+     *
      * 1. Read local from indexeddb (wouldn't do this if you had a real backend api to call/save)
      * 2. Read all non-local from rest call
      *      2a. Fallback to indexeddb for non-local

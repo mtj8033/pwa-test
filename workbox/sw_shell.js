@@ -73,7 +73,14 @@ if (workbox) {
       let entry;
       while (entry = await queue.shiftRequest()) {
         try {
-          await fetch(entry.request);
+          let clone = entry.request.clone();
+          let response = await fetch(clone);
+
+          // emit to the client
+          let clients = await self.clients.matchAll();
+          for (const client of clients) {
+            client.postMessage("test");
+          }
         } catch (error) {
           console.error('Replay failed for request', entry.request, error);
           await queue.unshiftRequest(entry);

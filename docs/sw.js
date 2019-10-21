@@ -73,7 +73,14 @@ if (workbox) {
       let entry;
       while (entry = await queue.shiftRequest()) {
         try {
-          await fetch(entry.request);
+          let clone = entry.request.clone();
+          let response = await fetch(clone);
+
+          // emit to the client
+          let clients = await self.clients.matchAll();
+          for (const client of clients) {
+            client.postMessage("test");
+          }
         } catch (error) {
           console.error('Replay failed for request', entry.request, error);
           await queue.unshiftRequest(entry);
@@ -213,7 +220,7 @@ if (workbox) {
   },
   {
     "url": "index.html",
-    "revision": "0cf30491d698f1cac49d5a75ee252d71"
+    "revision": "522e4c25c2e870ea4918ecdd8763be03"
   },
   {
     "url": "ios-appicon-1024-1024.74317fc8.png",
@@ -276,12 +283,12 @@ if (workbox) {
     "revision": "608dda8fb0743480fab91e0794225917"
   },
   {
-    "url": "main.3f87bcb3.js",
-    "revision": "4d43d763522e46d5fa871f3cc902313c"
-  },
-  {
     "url": "main.841951be.css",
     "revision": "6d393c82700bf485b93ae951e20a9688"
+  },
+  {
+    "url": "main.be570a4d.js",
+    "revision": "4b4f16775b9f9995ad2a44ccfdbd2c4c"
   },
   {
     "url": "manifest.webmanifest",
