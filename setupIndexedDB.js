@@ -47,6 +47,7 @@ if('serviceWorker' in navigator){
     let json = event.data;
     let id = json.localKey;
     json.saved = true;
+    console.log("received a todo from the sw", json, id);
     updateUI([json], id);
     updateTodoInLocal(json, id);
   });
