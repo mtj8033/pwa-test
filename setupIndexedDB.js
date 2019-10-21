@@ -194,10 +194,10 @@ async function readTodos() {
         json.push(...localTasks);
         replaceTodosWithLatestState(json, startId);
     } catch (reason) {
-        if (!navigator.onLine) {
+        // if (!navigator.onLine) {
             console.log("offline so loading from indexeddb");
             readTodosFromIndexedDB();
-        }
+        // }
         throw reason;
     }
 
