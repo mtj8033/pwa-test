@@ -220,7 +220,7 @@ if (workbox) {
   },
   {
     "url": "index.html",
-    "revision": "26c32c7ddc157b5513213c890ebec65e"
+    "revision": "c21b8282ac118a1e231b729e7e8866c1"
   },
   {
     "url": "ios-appicon-1024-1024.74317fc8.png",
